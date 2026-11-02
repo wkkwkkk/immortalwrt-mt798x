@@ -1,0 +1,22 @@
+name: Build 360T7 24.10 ubootmod + OAF v6.1.4
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: 拉取源码
+        uses: actions/checkout@v4
+        with:
+          ref: 24.10
+      - name: 拉取 OAF v6.1.4 源码
+        run: |
+          git clone --depth=1 --branch=v6.1.4 https://github.com/destan19/OpenAppFilter.git package/openappfilter
+      - name: 编译固件（mt7981 qihoo-360t7-ubootmod）
+        run: |
+          ./scripts/ci_build.sh mt7981 qihoo-360t7-ubootmod
+      - name: 上传固件
+        uses: actions/upload-artifact@v4
+        with:
+          name: 360T7-24.10-ubootmod-OAF6.1.4-firmware
+          path: bin/targets/mediatek/filogic/
